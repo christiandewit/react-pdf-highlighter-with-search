@@ -176,7 +176,8 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
       this.renderHighlightLayers();
     }
     if (prevProps.searchValue != this.props.searchValue) {
-      this.viewer.findController.executeCommand("find", {
+      this.eventBus.dispatch("find", {
+        type: "",
         query: this.props.searchValue,
         highlightAll: true,
         phraseSearch: true,
@@ -238,7 +239,8 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
 
   goToNextMatch = () => {
     const { searchValue } = this.props;
-    this.viewer.findController.executeCommand("findagain", {
+    this.eventBus.dispatch("find", {
+      type: "again",
       query: searchValue,
       highlightAll: true,
     });
@@ -246,7 +248,8 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
 
   goToPreviousMatch = () => {
     const { searchValue } = this.props;
-    this.viewer.findController.executeCommand("findagain", {
+    this.eventBus.dispatch("find", {
+      type: "again",
       query: searchValue,
       highlightAll: true,
       findPrevious: true,
@@ -665,7 +668,6 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
                     { image },
                     () => this.hideTipAndSelection(),
                     () => {
-                      console.log("setting ghost highlight", scaledPosition);
                       this.setState(
                         {
                           ghostHighlight: {
